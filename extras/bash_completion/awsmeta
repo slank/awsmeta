@@ -1,0 +1,16 @@
+_awsmeta () {
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    if [ "$(expr index "${COMP_WORDS[*]}" '-n')" != 0 ]; then
+        use="$(awsmeta --list | sed -ne "/^$cur/p")"
+    elif [ -z "$cur" ] || [ "${cur:(-1)}" == "/" ]; then
+        use="$(awsmeta $cur | sed -e "s#^#$cur#")"
+    elif [ "$(expr index $cur /)" == "0" ]; then
+        use="$(awsmeta)"
+    else
+        use="$(awsmeta ${cur%/*}/ | sed -e "s#^#${cur%/*}/#")"
+    fi
+
+    COMPREPLY=( $(compgen -W "$use" -- $cur) )
+}
+complete -o nospace -F _awsmeta awsmeta
