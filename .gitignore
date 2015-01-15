@@ -1,0 +1,4 @@
+*.pyc
+/build
+/awsmeta.egg-info
+/dist
